@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class GridSolver {
@@ -11,45 +12,27 @@ public class GridSolver {
             System.out.println("Last element: " + grid[19][19]);
 
             int[][] testgrid = {
-                {1, 2, 3, 4}, //h: 24
-                {5, 6, 7, 8}, //h: 1680
-                {9, 1, 2, 3}, //h: 54
-                {4, 5, 6, 7} //h: 840
+                {1, 2, 3, 98}, //h: 24
+                {5, 6, 99, 8}, //h: 1680
+                {9, 97, 2, 3}, //h: 54
+                {99, 5, 6, 7} //h: 840
             }; //v1: 180, v2:60, v3:252, v4: 672 
             //ddr: 84, ddl: 112
 
+            System.out.println("\nTEST GRID");
+            Result testResult = findLargestProduct(testgrid);
+            System.out.println("Largest product in test grid: " + testResult.maxProduct);
+            System.out.println("Numbers: " + Arrays.toString(testResult.bestNumbers));
+            System.out.println("Position: row " + testResult.bestRow + ", column " + testResult.bestColumn);
+            System.out.println("Direction: " + testResult.bestDirection);
 
-             //Test horisontal produkter med test grid
-            long maxHorizontal = findMaxHorizontal(testgrid);
-            System.out.println("Largest horizontal product: " + maxHorizontal);
-
-            //Test horisontal produkter
-            long maxHorizontal2 = findMaxHorizontal(grid);
-            System.out.println("Largest horizontal product: " + maxHorizontal2);
-
-            //Test vertikal produkt med test grid
-            long maxVertical = findMaxVertical(testgrid);
-            System.out.println("Largest vertical product: " + maxVertical);
-
-            //Test vertikal produkt 
-            long maxVertical2 = findMaxVertical(grid);
-            System.out.println("Largest vertical product: " + maxVertical2);
-
-            //Test diagonal ned høyre produkt med test grid
-            long maxDiagonalDownRight = findMaxDiagonalDownRight(testgrid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownRight);
-
-            //Test diagonal ned høyre produkt  
-            long maxDiagonalDownRight2 = findMaxDiagonalDownRight(grid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownRight2);
-
-            //Test diagonal ned venstre produkt med test grid
-            long maxDiagonalDownLeft = findMaxDiagonalDownLeft(testgrid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownLeft);
-
-            //Test diagonal ned venstre  produkt  
-            long maxDiagonalDownLeft2 = findMaxDiagonalDownLeft(grid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownLeft2);
+            System.out.println("\nMAIN GRID");
+            Result mainResult = findLargestProduct(grid);
+            System.out.println("Largest product in main grid: " + mainResult.maxProduct);
+            System.out.println("Numbers: " + Arrays.toString(mainResult.bestNumbers));
+            System.out.println("Position: row " + mainResult.bestRow + ", column " + mainResult.bestColumn);
+            System.out.println("Direction: " + mainResult.bestDirection);
+  
 
         } catch (IOException e){
             System.out.println("Error: " + e.getMessage());
@@ -70,69 +53,91 @@ public class GridSolver {
         return grid;
     }
 
-    private static long findMaxHorizontal(int[][] grid){
+    private static Result findLargestProduct(int[][]grid){
         long maxProduct = 0;
+        int[] bestNumbers = new int[4];
+        int bestRow = -1, bestColumn = -1;
+        String bestDirection = "";
 
-        for (int row = 0; row < grid.length; row++) {
-            for (int column = 0; column + 3 < grid[row].length; column++) { // siste posisjon må være innenfor gridet
-                long product = (long) grid[row][column] * grid[row][column+1] * grid[row][column+2] * grid[row][column+3];
-                if (product > maxProduct) {
-                    maxProduct = product;
+        for(int row = 0; row < grid.length; row++){
+            for(int column = 0; column < grid[row].length; column++){
+                
+                //Horizontal
+                if (column + 3 < grid[row].length){
+                    long product = (long) grid[row][column] * grid[row][column+1] * grid[row][column+2] * grid[row][column+3];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                        bestNumbers[0] = grid[row][column];
+                        bestNumbers[1] = grid[row][column+1]; 
+                        bestNumbers[2] = grid[row][column+2];
+                        bestNumbers[3] = grid[row][column+3];
+                        bestRow = row;
+                        bestColumn = column;
+                        bestDirection = "Horizontal";
+                    }
+                }
+
+                //Vertical
+                if (row + 3 < grid.length) {
+                    long product = (long) grid[row][column] * grid[row+1][column] * grid[row+2][column] * grid[row+3][column];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                        bestNumbers[0] = grid[row][column];
+                        bestNumbers[1] = grid[row+1][column];
+                        bestNumbers[2] = grid[row+2][column];
+                        bestNumbers[3] = grid[row+3][column];
+                        bestRow = row;
+                        bestColumn = column;
+                        bestDirection = "Vertical";
+                    }
+                }
+
+                //Diagonal down right
+                if (row + 3 < grid.length && column + 3 < grid[row].length) {
+                    long product = (long) grid[row][column] * grid[row+1][column+1] * grid[row+2][column+2] * grid[row+3][column+3];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                        bestNumbers[0] = grid[row][column];
+                        bestNumbers[1] = grid[row+1][column+1];
+                        bestNumbers[2] = grid[row+2][column+2];
+                        bestNumbers[3] = grid[row+3][column+3];
+                        bestRow = row;
+                        bestColumn = column;
+                        bestDirection = "Diagonal down right";
+                    }
+                }
+
+                //Diagnol down left
+                if (row + 3 < grid.length && column - 3 >= 0) {
+                    long product = (long) grid[row][column] * grid[row+1][column-1] * grid[row+2][column-2] * grid[row+3][column-3];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                        bestNumbers[0] = grid[row][column];
+                        bestNumbers[1] = grid[row+1][column-1];
+                        bestNumbers[2] = grid[row+2][column-2];
+                        bestNumbers[3] = grid[row+3][column-3];
+                        bestRow = row;
+                        bestColumn = column;
+                        bestDirection = "Diagonal down left";
+                    }
                 }
             }
         }
-
-        return maxProduct;
+                return new Result(maxProduct, bestNumbers, bestRow, bestColumn, bestDirection);
 
     }
 
-    private static long findMaxVertical(int[][]grid){
-        long maxProduct = 0;
-
-        for (int row = 0; row + 3 < grid.length; row++) { // siste posisjon må være innenfor gridet
-            for (int column = 0; column < grid[row].length; column++) { 
-                long product = (long) grid[row][column] * grid[row+1][column] * grid[row+2][column] * grid[row+3][column];
-                if (product > maxProduct) {
-                    maxProduct = product;
-                }
-            }
+    private static class Result {
+        long maxProduct;
+        int[] bestNumbers;
+        int bestRow, bestColumn;
+        String bestDirection;
+        
+        Result(long maxProduct, int[] bestNumbers, int bestRow, int bestColumn, String bestDirection) {
+            this.maxProduct = maxProduct;
+            this.bestNumbers = bestNumbers; 
+            this.bestColumn = bestColumn;
+            this.bestDirection = bestDirection;
         }
-
-        return maxProduct;
-
     }
-
-    private static long findMaxDiagonalDownRight(int[][] grid){
-         long maxProduct = 0;
-
-          for (int row = 0; row + 3 < grid.length; row++) { // siste posisjon må være innenfor gridet
-            for (int column = 0; column + 3 < grid[row].length; column++) { 
-                long product = (long) grid[row][column] * grid[row+1][column+1] * grid[row+2][column+2] * grid[row+3][column+3];
-                if (product > maxProduct) {
-                    maxProduct = product;
-                }
-            }
-        }
-
-        return maxProduct;
-
-    }
-
-     private static long findMaxDiagonalDownLeft(int[][] grid){
-         long maxProduct = 0;
-
-          for (int row = 0; row + 3 < grid.length; row++) {
-            for (int column = 3; column < grid[row].length; column++) { 
-                long product = (long) grid[row][column] * grid[row+1][column-1] * grid[row+2][column-2] * grid[row+3][column-3];
-                if (product > maxProduct) {
-                    maxProduct = product;
-                }
-            }
-        }
-
-        return maxProduct;
-
-    }
-
-
 }
