@@ -56,7 +56,11 @@ public class GridSolver {
                         bestRow = row;
                         bestColumn = column;
                         bestDirection = "Horizontal";
+                        System.out.println("New max found: " + product + " at row " + row + ", col " + column);
+
                     }
+
+
                 }
 
                 //Vertical
@@ -120,6 +124,7 @@ public class GridSolver {
             this.bestNumbers = bestNumbers; 
             this.bestColumn = bestColumn;
             this.bestDirection = bestDirection;
+            this.bestRow = bestRow;
         }
     }
 }

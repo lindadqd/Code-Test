@@ -11,5 +11,5 @@ Given the file “grid.txt”, containing a 20 x 20 grid:
 Solution:
 Largest product in grid: 7588665102226032
 Numbers: [8828, 9666, 9003, 9878]
-Position: row 0, column 15
+Position: row 11, column 15
 Direction: Horizontal
