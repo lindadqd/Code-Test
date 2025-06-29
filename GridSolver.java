@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class GridSolver {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try{
             int[][]grid = readGrid("grid.txt");
             System.out.println("Grid loaded with dimensions: " + grid.length + "x" + grid[0].length);
@@ -31,21 +31,22 @@ public class GridSolver {
                 grid[row][column] = scanner.nextInt();
             }
         }
+
         scanner.close();
         return grid;
     }
 
-    private static Result findLargestProduct(int[][]grid){
+    private static Result findLargestProduct(int[][]grid) {
         long maxProduct = 0;
         int[] bestNumbers = new int[4];
         int bestRow = -1, bestColumn = -1;
         String bestDirection = "";
 
-        for(int row = 0; row < grid.length; row++){
-            for(int column = 0; column < grid[row].length; column++){
+        for(int row = 0; row < grid.length; row++) {
+            for(int column = 0; column < grid[row].length; column++) {
                 
                 //Horizontal
-                if (column + 3 < grid[row].length){
+                if (column + 3 < grid[row].length) {
                     long product = (long) grid[row][column] * grid[row][column+1] * grid[row][column+2] * grid[row][column+3];
                     if (product > maxProduct) {
                         maxProduct = product;
@@ -56,11 +57,7 @@ public class GridSolver {
                         bestRow = row;
                         bestColumn = column;
                         bestDirection = "Horizontal";
-                        System.out.println("New max found: " + product + " at row " + row + ", col " + column);
-
                     }
-
-
                 }
 
                 //Vertical
@@ -109,8 +106,7 @@ public class GridSolver {
                 }
             }
         }
-                return new Result(maxProduct, bestNumbers, bestRow, bestColumn, bestDirection);
-
+        return new Result(maxProduct, bestNumbers, bestRow, bestColumn, bestDirection);
     }
 
     private static class Result {
