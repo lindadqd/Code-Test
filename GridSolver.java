@@ -7,28 +7,10 @@ public class GridSolver {
     public static void main(String[] args){
         try{
             int[][]grid = readGrid("grid.txt");
-            System.out.println("Grid dimensions: " + grid.length + "x" + grid[0].length);
-            System.out.println("First element: " + grid[0][0]);
-            System.out.println("Last element: " + grid[19][19]);
+            System.out.println("Grid loaded with dimensions: " + grid.length + "x" + grid[0].length);
 
-            int[][] testgrid = {
-                {1, 2, 3, 98}, //h: 24
-                {5, 6, 99, 8}, //h: 1680
-                {9, 97, 2, 3}, //h: 54
-                {99, 5, 6, 7} //h: 840
-            }; //v1: 180, v2:60, v3:252, v4: 672 
-            //ddr: 84, ddl: 112
-
-            System.out.println("\nTEST GRID");
-            Result testResult = findLargestProduct(testgrid);
-            System.out.println("Largest product in test grid: " + testResult.maxProduct);
-            System.out.println("Numbers: " + Arrays.toString(testResult.bestNumbers));
-            System.out.println("Position: row " + testResult.bestRow + ", column " + testResult.bestColumn);
-            System.out.println("Direction: " + testResult.bestDirection);
-
-            System.out.println("\nMAIN GRID");
             Result mainResult = findLargestProduct(grid);
-            System.out.println("Largest product in main grid: " + mainResult.maxProduct);
+            System.out.println("\nLargest product in grid: " + mainResult.maxProduct);
             System.out.println("Numbers: " + Arrays.toString(mainResult.bestNumbers));
             System.out.println("Position: row " + mainResult.bestRow + ", column " + mainResult.bestColumn);
             System.out.println("Direction: " + mainResult.bestDirection);
