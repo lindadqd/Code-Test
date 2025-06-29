@@ -16,6 +16,7 @@ public class GridSolver {
                 {9, 1, 2, 3}, //h: 54
                 {4, 5, 6, 7} //h: 840
             }; //v1: 180, v2:60, v3:252, v4: 672 
+            //ddr: 84, ddl: 112
 
 
              //Test horisontal produkter med test grid
@@ -33,6 +34,22 @@ public class GridSolver {
             //Test vertikal produkt 
             long maxVertical2 = findMaxVertical(grid);
             System.out.println("Largest vertical product: " + maxVertical2);
+
+            //Test diagonal ned høyre produkt med test grid
+            long maxDiagonalDownRight = findMaxDiagonalDownRight(testgrid);
+            System.out.println("Largest diagonal down right product: " + maxDiagonalDownRight);
+
+            //Test diagonal ned høyre produkt  
+            long maxDiagonalDownRight2 = findMaxDiagonalDownRight(grid);
+            System.out.println("Largest diagonal down right product: " + maxDiagonalDownRight2);
+
+            //Test diagonal ned venstre produkt med test grid
+            long maxDiagonalDownLeft = findMaxDiagonalDownLeft(testgrid);
+            System.out.println("Largest diagonal down right product: " + maxDiagonalDownLeft);
+
+            //Test diagonal ned venstre  produkt  
+            long maxDiagonalDownLeft2 = findMaxDiagonalDownLeft(grid);
+            System.out.println("Largest diagonal down right product: " + maxDiagonalDownLeft2);
 
         } catch (IOException e){
             System.out.println("Error: " + e.getMessage());
@@ -84,4 +101,38 @@ public class GridSolver {
         return maxProduct;
 
     }
+
+    private static long findMaxDiagonalDownRight(int[][] grid){
+         long maxProduct = 0;
+
+          for (int row = 0; row + 3 < grid.length; row++) { // siste posisjon må være innenfor gridet
+            for (int column = 0; column + 3 < grid[row].length; column++) { 
+                long product = (long) grid[row][column] * grid[row+1][column+1] * grid[row+2][column+2] * grid[row+3][column+3];
+                if (product > maxProduct) {
+                    maxProduct = product;
+                }
+            }
+        }
+
+        return maxProduct;
+
+    }
+
+     private static long findMaxDiagonalDownLeft(int[][] grid){
+         long maxProduct = 0;
+
+          for (int row = 0; row + 3 < grid.length; row++) {
+            for (int column = 3; column < grid[row].length; column++) { 
+                long product = (long) grid[row][column] * grid[row+1][column-1] * grid[row+2][column-2] * grid[row+3][column-3];
+                if (product > maxProduct) {
+                    maxProduct = product;
+                }
+            }
+        }
+
+        return maxProduct;
+
+    }
+
+
 }
