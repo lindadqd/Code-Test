@@ -18,38 +18,11 @@ public class GridSolver {
             }; //v1: 180, v2:60, v3:252, v4: 672 
             //ddr: 84, ddl: 112
 
+            long maxProductGrid = findLargestProduct(testgrid);
+            System.out.println("Largest product in grid: " + maxProductGrid);
 
-             //Test horisontal produkter med test grid
-            long maxHorizontal = findMaxHorizontal(testgrid);
-            System.out.println("Largest horizontal product: " + maxHorizontal);
-
-            //Test horisontal produkter
-            long maxHorizontal2 = findMaxHorizontal(grid);
-            System.out.println("Largest horizontal product: " + maxHorizontal2);
-
-            //Test vertikal produkt med test grid
-            long maxVertical = findMaxVertical(testgrid);
-            System.out.println("Largest vertical product: " + maxVertical);
-
-            //Test vertikal produkt 
-            long maxVertical2 = findMaxVertical(grid);
-            System.out.println("Largest vertical product: " + maxVertical2);
-
-            //Test diagonal ned høyre produkt med test grid
-            long maxDiagonalDownRight = findMaxDiagonalDownRight(testgrid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownRight);
-
-            //Test diagonal ned høyre produkt  
-            long maxDiagonalDownRight2 = findMaxDiagonalDownRight(grid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownRight2);
-
-            //Test diagonal ned venstre produkt med test grid
-            long maxDiagonalDownLeft = findMaxDiagonalDownLeft(testgrid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownLeft);
-
-            //Test diagonal ned venstre  produkt  
-            long maxDiagonalDownLeft2 = findMaxDiagonalDownLeft(grid);
-            System.out.println("Largest diagonal down right product: " + maxDiagonalDownLeft2);
+            long maxProductGrid2 = findLargestProduct(grid);
+            System.out.println("Largest product in grid: " + maxProductGrid2);
 
         } catch (IOException e){
             System.out.println("Error: " + e.getMessage());
@@ -70,69 +43,45 @@ public class GridSolver {
         return grid;
     }
 
-    private static long findMaxHorizontal(int[][] grid){
+    private static long findLargestProduct(int[][]grid){
         long maxProduct = 0;
 
-        for (int row = 0; row < grid.length; row++) {
-            for (int column = 0; column + 3 < grid[row].length; column++) { // siste posisjon må være innenfor gridet
-                long product = (long) grid[row][column] * grid[row][column+1] * grid[row][column+2] * grid[row][column+3];
-                if (product > maxProduct) {
-                    maxProduct = product;
+        for(int row = 0; row < grid.length; row++){
+            for(int column = 0; column < grid[row].length; column++){
+                
+                //Horizontal
+                if (column + 3 < grid[row].length){
+                    long product = (long) grid[row][column] * grid[row][column+1] * grid[row][column+2] * grid[row][column+3];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                    }
+                }
+
+                //Vertical
+                if (row + 3 < grid.length) {
+                    long product = (long) grid[row][column] * grid[row+1][column] * grid[row+2][column] * grid[row+3][column];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                    }
+                }
+
+                //Diagonal down right
+                if (row + 3 < grid.length && column + 3 < grid[row].length) {
+                    long product = (long) grid[row][column] * grid[row+1][column+1] * grid[row+2][column+2] * grid[row+3][column+3];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                    }
+                }
+
+                //Diagnol down left
+                if (row + 3 < grid.length && column - 3 >= grid[row].length) {
+                    long product = (long) grid[row][column] * grid[row+1][column-1] * grid[row+2][column-2] * grid[row+3][column-3];
+                    if (product > maxProduct) {
+                        maxProduct = product;
+                    }
                 }
             }
         }
-
-        return maxProduct;
-
+                return maxProduct;
     }
-
-    private static long findMaxVertical(int[][]grid){
-        long maxProduct = 0;
-
-        for (int row = 0; row + 3 < grid.length; row++) { // siste posisjon må være innenfor gridet
-            for (int column = 0; column < grid[row].length; column++) { 
-                long product = (long) grid[row][column] * grid[row+1][column] * grid[row+2][column] * grid[row+3][column];
-                if (product > maxProduct) {
-                    maxProduct = product;
-                }
-            }
-        }
-
-        return maxProduct;
-
-    }
-
-    private static long findMaxDiagonalDownRight(int[][] grid){
-         long maxProduct = 0;
-
-          for (int row = 0; row + 3 < grid.length; row++) { // siste posisjon må være innenfor gridet
-            for (int column = 0; column + 3 < grid[row].length; column++) { 
-                long product = (long) grid[row][column] * grid[row+1][column+1] * grid[row+2][column+2] * grid[row+3][column+3];
-                if (product > maxProduct) {
-                    maxProduct = product;
-                }
-            }
-        }
-
-        return maxProduct;
-
-    }
-
-     private static long findMaxDiagonalDownLeft(int[][] grid){
-         long maxProduct = 0;
-
-          for (int row = 0; row + 3 < grid.length; row++) {
-            for (int column = 3; column < grid[row].length; column++) { 
-                long product = (long) grid[row][column] * grid[row+1][column-1] * grid[row+2][column-2] * grid[row+3][column-3];
-                if (product > maxProduct) {
-                    maxProduct = product;
-                }
-            }
-        }
-
-        return maxProduct;
-
-    }
-
-
 }
